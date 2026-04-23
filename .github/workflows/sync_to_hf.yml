@@ -15,4 +15,4 @@ jobs:
       - name: Push to Hub
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: git push --force https://kyorlin2001:$HF_TOKEN@huggingface.co/spaces/kyorlin2001/carreer-coach main
+        run: git push --force https://kyorlin2001:$HF_TOKEN@huggingface.co/spaces/kyorlin2001/career-coach main
