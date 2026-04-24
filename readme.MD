@@ -1,3 +1,15 @@
+---
+title: Career Coach
+emoji: 🤖
+colorFrom: blue
+colorTo: green
+sdk: gradio
+sdk_version: "5.0.0"
+python_version: "3.10"
+app_file: app.py
+pinned: false
+---
+
 # Career Coach
 
 Career Coach is a Gradio-based AI assistant for job seekers, built as part of the IBM Generative AI Professional Certificate and later refactored for Hugging Face deployment.
