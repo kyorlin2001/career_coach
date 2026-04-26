@@ -2,7 +2,8 @@ import gradio as gr
 
 from career_advisor import generate_career_advice
 from cover_letter import generate_cover_letter
-from resume_polisher import polish_resume, extract_resume_text
+from resume_polisher import polish_resume
+from resume_utils import extract_resume_text
 from hf_client import generate_text
 
 
@@ -39,9 +40,26 @@ with gr.Blocks(title="Career Coach") as demo:
             gr.Markdown("Get ATS-focused advice to improve a resume for a specific role.")
             position_applied = gr.Textbox(label="Position Applied For")
             job_description = gr.Textbox(label="Job Description", lines=10)
-            resume_content = gr.Textbox(label="Resume Content", lines=10)
+            advisor_file = gr.File(
+                label="Resume File (Optional)",
+                file_count="single",
+                file_types=[".pdf", ".docx", ".odt", ".txt", ".md"],
+                type="filepath",
+            )
+            resume_content = gr.Textbox(
+                label="Resume Content",
+                lines=10,
+                placeholder="Upload a resume file or paste resume text here...",
+            )
             advisor_output = gr.Textbox(label="Advice")
             advisor_button = gr.Button("Generate Advice")
+
+            advisor_file.upload(
+                fn=load_resume_into_textbox,
+                inputs=advisor_file,
+                outputs=resume_content,
+            )
+
             advisor_button.click(
                 fn=generate_career_advice,
                 inputs=[position_applied, job_description, resume_content],
@@ -53,9 +71,26 @@ with gr.Blocks(title="Career Coach") as demo:
             company_name = gr.Textbox(label="Company Name")
             position_name = gr.Textbox(label="Position Name")
             cover_job_description = gr.Textbox(label="Job Description", lines=10)
-            cover_resume_content = gr.Textbox(label="Resume Content", lines=10)
+            cover_file = gr.File(
+                label="Resume File (Optional)",
+                file_count="single",
+                file_types=[".pdf", ".docx", ".odt", ".txt", ".md"],
+                type="filepath",
+            )
+            cover_resume_content = gr.Textbox(
+                label="Resume Content",
+                lines=10,
+                placeholder="Upload a resume file or paste resume text here...",
+            )
             cover_output = gr.Textbox(label="Cover Letter")
             cover_button = gr.Button("Generate Cover Letter")
+
+            cover_file.upload(
+                fn=load_resume_into_textbox,
+                inputs=cover_file,
+                outputs=cover_resume_content,
+            )
+
             cover_button.click(
                 fn=generate_cover_letter,
                 inputs=[company_name, position_name, cover_job_description, cover_resume_content],
@@ -66,11 +101,11 @@ with gr.Blocks(title="Career Coach") as demo:
             gr.Markdown("Upload a resume file or paste text, then get a polished version and a downloadable PDF.")
             polish_position = gr.Textbox(label="Position Name")
             polish_file = gr.File(
-    label="Resume File (Optional)",
-    file_count="single",
-    file_types=[".pdf", ".docx", ".odt", ".txt", ".md"],
-    type="filepath",
-)
+                label="Resume File (Optional)",
+                file_count="single",
+                file_types=[".pdf", ".docx", ".odt", ".txt", ".md"],
+                type="filepath",
+            )
             polish_resume_content = gr.Textbox(
                 label="Resume Content (Optional)",
                 lines=20,
